@@ -1,0 +1,37 @@
+<div id="clock-in-system">
+    <button id="action-btn">Clock In</button>
+    <p id="status-display">Ready</p>
+</div>
+
+<script>
+    const btn = document.getElementById('action-btn');
+    const status = document.getElementById('status-display');
+
+    btn.addEventListener('click', () => {
+        if (!navigator.geolocation) {
+            status.textContent = "Geolocation is not supported by your browser";
+            return;
+        }
+
+        status.textContent = "Locating...";
+
+        // Getting the position with high accuracy
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const time = new Date().toLocaleTimeString();
+                
+                status.innerHTML = `Success!<br>Time: ${time}<br>Lat: ${lat}<br>Long: ${lon}`;
+            },
+            (error) => {
+                status.textContent = `Error: ${error.message}`;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            }
+        );
+    });
+</script>
