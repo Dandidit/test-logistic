@@ -1,40 +1,52 @@
-<div id="clock-in-system">
-    <button id="action-btn">Clock In</button>
-    <p id="status-display">Ready</p>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+</head>
+<body>
 
-<script>
-    const btn = document.getElementById('action-btn');
-    const status = document.getElementById('status-display');
+    <div id="clock-in-system">
+        <button id="action-btn" style="padding: 20px;">Clock In</button>
+        <p id="status-display">Ready</p>
+    </div>
 
-    btn.addEventListener('click', () => {
-        if (!navigator.geolocation) {
-            status.textContent = "Geolocation is not supported by your browser";
-            return;
-        }
-        status.textContent = "Locating...";
+    <script>
+        const btn = document.getElementById('action-btn');
+        const status = document.getElementById('status-display');
 
-        // Getting the position with high accuracy
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                const time = new Date().toLocaleTimeString();
-                
-                status.innerHTML = `Success!<br>Time: ${time}<br>Lat: ${lat}<br>Long: ${lon}`;
-                console.log("Navigator fuck:", navigator);
-            },
-            (error) => {
-                status.textContent = `Error: ${error.message}`;
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+        btn.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                status.textContent = "Geolocation is not supported";
+                return;
             }
-        );
-    });
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+            status.textContent = "Locating... (Please wait)";
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const time = new Date().toLocaleTimeString();
+                    
+                    status.innerHTML = `Success!<br>Time: ${time}<br>Lat: ${lat}<br>Long: ${lon}`;
+                    
+                    // Log the POSITION object, not the NAVIGATOR object
+                    console.log("Position Data:", position);
+                },
+                (error) => {
+                    status.textContent = `Error: ${error.message} (Code: ${error.code})`;
+                    console.error("Geo Error:", error);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 30000, // Increased to 30s for better reliability
+                    maximumAge: 0
+                }
+            );
+        });
+    </script>
+</body>
+</html>
