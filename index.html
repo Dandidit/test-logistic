@@ -12,7 +12,6 @@
             status.textContent = "Geolocation is not supported by your browser";
             return;
         }
-        console.log("Navigator:", navigator);
         status.textContent = "Locating...";
 
         // Getting the position with high accuracy
@@ -23,6 +22,7 @@
                 const time = new Date().toLocaleTimeString();
                 
                 status.innerHTML = `Success!<br>Time: ${time}<br>Lat: ${lat}<br>Long: ${lon}`;
+                console.log("Navigator fuck:", navigator);
             },
             (error) => {
                 status.textContent = `Error: ${error.message}`;
@@ -35,3 +35,6 @@
         );
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
